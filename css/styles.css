@@ -44,17 +44,20 @@ button {
 }
 
 .app-shell {
-    display: grid;
-    grid-template-columns: 320px minmax(0, 1fr);
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
 }
 
 .sidebar {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
     justify-content: space-between;
-    padding: 32px;
-    background: linear-gradient(180deg, #183a37 0%, #0d2522 100%);
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px 32px;
+    background: linear-gradient(90deg, #183a37 0%, #0d2522 100%);
     color: #fefbf5;
 }
 
@@ -68,9 +71,9 @@ button {
 }
 
 .sidebar h1 {
-    font-size: clamp(2rem, 4vw, 3.2rem);
-    line-height: 0.98;
-    margin-top: 12px;
+    font-size: clamp(1rem, 1.5vw, 1.4rem);
+    line-height: 1.2;
+    margin-top: 0;
 }
 
 .sidebar-copy,
@@ -82,8 +85,7 @@ button {
 }
 
 .sidebar-copy {
-    color: rgba(254, 251, 245, 0.76);
-    max-width: 26ch;
+    display: none;
 }
 
 .eyebrow {
@@ -96,9 +98,11 @@ button {
 }
 
 .nav {
-    display: grid;
-    gap: 12px;
-    margin-top: 32px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 0;
 }
 
 .nav-link {
@@ -107,14 +111,14 @@ button {
     background: rgba(255, 255, 255, 0.05);
     color: #fefbf5;
     text-align: left;
-    padding: 16px 18px;
+    padding: 10px 16px;
     transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
 }
 
 .nav-link:hover,
 .nav-link:focus-visible,
 .nav-link.is-active {
-    transform: translateX(4px);
+    transform: translateY(-2px);
     background: rgba(217, 108, 63, 0.16);
     border-color: rgba(217, 108, 63, 0.44);
     outline: none;
@@ -445,7 +449,6 @@ textarea {
 
 @media (max-width: 1120px) {
 
-    .app-shell,
     .content-grid,
     .section-layout,
     .summary-layout,
@@ -455,7 +458,8 @@ textarea {
     }
 
     .sidebar {
-        gap: 28px;
+        gap: 12px;
+        padding: 12px 20px;
     }
 
     .hero-card,
@@ -470,7 +474,7 @@ textarea {
 
     .main-content,
     .sidebar {
-        padding: 20px;
+        padding: 16px 20px;
     }
 
     .inline-fields {
