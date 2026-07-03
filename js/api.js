@@ -1,4 +1,17 @@
-const API_BASE_URL = "http://localhost:8080/api/v1";
+const DEFAULT_API_ORIGIN = "https://baendend-expensetracker.azurewebsites.net";
+
+function normalizeOrigin(value) {
+    return String(value || "").replace(/\/+$/, "");
+}
+
+function resolveApiBaseUrl() {
+    const configuredOrigin = window.ExpenseTrackerConfig?.apiOrigin;
+    const apiOrigin = configuredOrigin ? normalizeOrigin(configuredOrigin) : DEFAULT_API_ORIGIN;
+
+    return `${apiOrigin}/api/v1`;
+}
+
+const API_BASE_URL = resolveApiBaseUrl();
 
 function buildHeaders(body) {
     const headers = {
