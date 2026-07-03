@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div>
+                <p class="eyebrow">Expense Tracker</p>
+                <h1>Control spending without the spreadsheet drift.</h1>
+                <p class="sidebar-copy">Manage categories, track expenses, and pull monthly totals from your existing
+                    API.</p>
+            </div>
+
+            <nav class="nav" aria-label="Primary">
+                <button class="nav-link is-active" data-view="dashboard" type="button">Overview</button>
+                <button class="nav-link" data-view="categories" type="button">Categories</button>
+                <button class="nav-link" data-view="expenses" type="button">Expenses</button>
+                <button class="nav-link" data-view="summary" type="button">Monthly Summary</button>
+            </nav>
+
+            <div class="sidebar-note">
+                <span class="note-dot"></span>
+                <p>Backend: <strong>http://localhost:8080</strong></p>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">Frontend Console</p>
+                    <h2 id="view-title">Overview</h2>
+                </div>
+                <div class="status-panel" id="status-panel" aria-live="polite"></div>
+            </header>
+
+            <section class="view is-active" id="dashboard-view" data-view-panel="dashboard">
+                <div class="hero-card">
+                    <div>
+                        <p class="eyebrow">Snapshot</p>
+                        <h3>Live numbers from your expense service.</h3>
+                        <p>Use the category and expense sections to make changes, then return here for the current
+                            overview.</p>
+                    </div>
+                    <div class="hero-meta">
+                        <span class="hero-badge">Vanilla JS</span>
+                        <span class="hero-badge">Responsive CSS</span>
+                        <span class="hero-badge">REST API</span>
+                    </div>
+                </div>
+
+                <div class="stats-grid" id="dashboard-stats"></div>
+
+                <div class="content-grid">
+                    <section class="panel">
+                        <div class="section-heading">
+                            <div>
+                                <p class="eyebrow">Recent activity</p>
+                                <h3>Latest expenses</h3>
+                            </div>
+                        </div>
+                        <div id="recent-expenses"></div>
+                    </section>
+
+                    <section class="panel accent-panel">
+                        <div class="section-heading">
+                            <div>
+                                <p class="eyebrow">Distribution</p>
+                                <h3>Top categories by spend</h3>
+                            </div>
+                        </div>
+                        <div id="category-breakdown"></div>
+                    </section>
+                </div>
+            </section>
+
+            <section class="view" id="categories-view" data-view-panel="categories">
+                <div class="section-layout">
+                    <section class="panel form-panel">
+                        <div class="section-heading">
+                            <div>
+                                <p class="eyebrow">Categories</p>
+                                <h3 id="category-form-title">Create category</h3>
+                            </div>
+                        </div>
+
+                        <form id="category-form" class="stack-form">
+                            <input type="hidden" name="categoryId" id="category-id">
+
+                            <label>
+                                <span>Name</span>
+                                <input type="text" id="category-name" name="name" maxlength="100"
+                                    placeholder="e.g. Groceries" required>
+                            </label>
+
+                            <label>
+                                <span>Description</span>
+                                <textarea id="category-description" name="description" maxlength="255" rows="4"
+                                    placeholder="Optional note about this category"></textarea>
+                            </label>
+
+                            <div class="form-actions">
+                                <button class="button button-primary" type="submit">Save category</button>
+                                <button class="button button-secondary" type="button"
+                                    id="category-cancel">Cancel</button>
+                            </div>
+                        </form>
+                    </section>
+
+                    <section class="panel list-panel">
+                        <div class="section-heading">
+                            <div>
+                                <p class="eyebrow">Category list</p>
+                                <h3>Manage your groups</h3>
+                            </div>
+                        </div>
+                        <div id="category-list" class="card-list"></div>
+                    </section>
+                </div>
+            </section>
+
+            <section class="view" id="expenses-view" data-view-panel="expenses">
+                <div class="toolbar panel">
+                    <div class="filter-grid">
+                        <label>
+                            <span>Search</span>
+                            <input type="search" id="expense-search" placeholder="Search description or category">
+                        </label>
+
+                        <label>
+                            <span>Category</span>
+                            <select id="expense-filter-category">
+                                <option value="">All categories</option>
+                            </select>
+                        </label>
+
+                        <label>
+                            <span>Month</span>
+                            <input type="month" id="expense-filter-month">
+                        </label>
+
+                        <div class="toolbar-actions">
+                            <button class="button button-secondary" type="button" id="expense-filter-reset">Reset
+                                filters</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-layout">
+                    <section class="panel form-panel">
+                        <div class="section-heading">
+                            <div>
+                                <p class="eyebrow">Expenses</p>
+                                <h3 id="expense-form-title">Create expense</h3>
+                            </div>
+                        </div>
+
+                        <form id="expense-form" class="stack-form">
+                            <input type="hidden" name="expenseId" id="expense-id">
+
+                            <label>
+                                <span>Description</span>
+                                <input type="text" id="expense-description" name="description" maxlength="255"
+                                    placeholder="Taxi to airport" required>
+                            </label>
+
+                            <div class="inline-fields">
+                                <label>
+                                    <span>Amount</span>
+                                    <input type="number" id="expense-amount" name="amount" min="0.01" step="0.01"
+                                        placeholder="0.00" required>
+                                </label>
+
+                                <label>
+                                    <span>Date</span>
+                                    <input type="date" id="expense-date" name="expenseDate" required>
+                                </label>
+                            </div>
+
+                            <label>
+                                <span>Category</span>
+                                <select id="expense-category" name="categoryId" required>
+                                    <option value="">Select a category</option>
+                                </select>
+                            </label>
+
+                            <div class="form-actions">
+                                <button class="button button-primary" type="submit">Save expense</button>
+                                <button class="button button-secondary" type="button"
+                                    id="expense-cancel">Cancel</button>
+                            </div>
+                        </form>
+                    </section>
+
+                    <section class="panel list-panel">
+                        <div class="section-heading">
+                            <div>
+                                <p class="eyebrow">Expense list</p>
+                                <h3>Track each transaction</h3>
+                            </div>
+                        </div>
+                        <div id="expense-list" class="table-wrap"></div>
+                    </section>
+                </div>
+            </section>
+
+            <section class="view" id="summary-view" data-view-panel="summary">
+                <div class="section-layout summary-layout">
+                    <section class="panel form-panel">
+                        <div class="section-heading">
+                            <div>
+                                <p class="eyebrow">Summary request</p>
+                                <h3>Pick a month</h3>
+                            </div>
+                        </div>
+
+                        <form id="summary-form" class="stack-form">
+                            <div class="inline-fields">
+                                <label>
+                                    <span>Year</span>
+                                    <input type="number" id="summary-year" min="2000" max="2100" required>
+                                </label>
+
+                                <label>
+                                    <span>Month</span>
+                                    <input type="number" id="summary-month" min="1" max="12" required>
+                                </label>
+                            </div>
+
+                            <div class="form-actions">
+                                <button class="button button-primary" type="submit">Load summary</button>
+                            </div>
+                        </form>
+                    </section>
+
+                    <section class="panel accent-panel">
+                        <div class="section-heading">
+                            <div>
+                                <p class="eyebrow">Monthly totals</p>
+                                <h3>Summary response</h3>
+                            </div>
+                        </div>
+                        <div id="summary-cards" class="stats-grid compact"></div>
+                    </section>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="./js/main.js"></script>
+</body>
+
+</html>
